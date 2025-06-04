@@ -1,0 +1,20 @@
+.next_best_action_btn.next_best_action_btn_state_checked-out {
+  background-color: #48b0b7;
+}
+
+.next_best_action_btn.next_best_action_btn_state_published {
+  background-color: #16A34B;
+}
+
+.next_best_action_btn.next_best_action_btn_state_in-production {
+  background-color: #48b0b7;
+}
+
+.next_best_action_btn.x-btn-split-right > .x-btn-button {
+  border-right: 1px solid white;
+}
+
+.rename-icon {
+  background: url("../img/rename.svg");
+  background-size: 16px;
+}

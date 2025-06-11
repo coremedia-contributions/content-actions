@@ -8,7 +8,19 @@ If a project is inactive it means that the development has been discontinued and
 # Studio Content Actions for CoreMedia Blueprint
 This extension adds a Content-Actions Button to the document form toolbar and removes the Action-Toolbar
 
+## Features
+### Content-Actions Menu 
 ![content-actions-01.png](docs/content-actions-01.png)
+
+### Next-Best-Action Button
+Content is checked out
+![content-actions-02.png](docs/content-actions-02.png)
+
+Content is not published yet
+![content-actions-03.png](docs/content-actions-03.png)
+
+Content is published
+![content-actions-04.png](docs/content-actions-04.png)
 
 The extension is meant to be a code drop. Use it as-is and feel free to adapt it to your needs.
 

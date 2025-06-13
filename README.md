@@ -5,11 +5,11 @@ Please read the versioning section of the project to see what other CoreMedia ve
 If a project is inactive it means that the development has been discontinued and won't support future CoreMedia versions."
 )
 
-# Studio Content Actions for CoreMedia Blueprint
-This extension adds a Content-Actions Button to the document form toolbar and removes the Action-Toolbar
+# Studio Quick Actions for CoreMedia Blueprint
+This extension adds a Quick Actions Button to the document form toolbar and removes the Action-Toolbar
 
 ## Features
-### Content-Actions Menu 
+### Quick Actions Menu 
 ![content-actions-01.png](docs/content-actions-01.png)
 
 ### Next-Best-Action Button

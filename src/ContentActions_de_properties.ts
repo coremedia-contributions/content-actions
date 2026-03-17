@@ -12,11 +12,13 @@ ResourceBundleUtil.override(ContentActions_properties, {
   ContentAction_versionComparison_open_text: "Versionen vergleichen",
   ContentAction_versionComparison_close_text: "Versionsvergleich schließen",
   ContentAction_masterComparison_open_text: "Vergleich mit Master",
+  ContentAction_openEditingHistory_text: "Änderungshistorie anzeigen",
+  ContentAction_openFormularEditor_text: "Formular anpassen",
 
   state_checked_out: "In Bearbeitung",
   state_published: "Publiziert",
   state_checked_in: "Aktuell",
 
-  next_action_checkin: "Änderungen zurückgeben",
+  next_action_checkin: "Einchecken",
   next_action_publish: "Publizieren",
 })

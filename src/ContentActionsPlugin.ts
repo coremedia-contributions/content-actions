@@ -32,6 +32,12 @@ import HideServiceSplitButton
   from "@coremedia/studio-client.main.hideservice-components/components/HideServiceSplitButton";
 import HideComponentPlugin from "./plugins/HideComponentPlugin";
 import HideItemsPlugin from "./plugins/HideItemsPlugin";
+import AdditionalStyleClassPlugin from "@coremedia/studio-client.ext.ui-components/plugins/AdditionalStyleClassPlugin";
+import PreviewPanelToolbar from "@coremedia/studio-client.main.editor-components/sdk/preview/PreviewPanelToolbar";
+import ControlRoom from "@coremedia/studio-client.main.control-room-editor-components/ControlRoom";
+import MultiItemSplitter from "@coremedia/studio-client.ext.ui-components/layouts/MultiItemSplitter";
+import SplitterSkin from "@coremedia/studio-client.ext.ui-components/skins/SplitterSkin";
+import ContentActionsPanel from "./controlroom/ContentActionsPanel";
 
 interface ContentActionsPluginConfig extends Config<StudioPlugin> {
 }
@@ -85,7 +91,8 @@ class ContentActionsPlugin extends StudioPlugin {
                   baseAction: Config(CloseVersionComparisonAction, {contentValueExpression: WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION}),
                 }),
               ]
-            })
+            }),
+            Config(AdditionalStyleClassPlugin, {cls: "readonly-toolbar"}),
           ]
         }),
 
@@ -101,7 +108,8 @@ class ContentActionsPlugin extends StudioPlugin {
                   baseAction: Config(CloseVersionComparisonAction, {contentValueExpression: WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION}),
                 }),
               ]
-            })
+            }),
+            Config(AdditionalStyleClassPlugin, {cls: "readonly-toolbar"}),
           ]
         }),
 
@@ -118,14 +126,28 @@ class ContentActionsPlugin extends StudioPlugin {
               ]
             }),
             Config(AddItemsPlugin, {
-              onlyIf: isDocumentFormToolbar && bind(this$, this$.#isContentActionsEnabled),
+              onlyIf: isDocumentFormToolbar,
               index: 0,
               items: [
                 Config(ContentTypeIconDisplayField, {itemId: "contentTypeToolbarFieldItemId", bindTo: WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION}),
                 Config(Spacer, {width: 20, itemId: "spacerXItemId"}),
-                Config(NextBestActionButton, {itemId: "nextBestActionItemId", contentValueExpression: WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION,
-                  menu: Config(ContentActionMenu, {itemId: ContentActionMenu.CONTENT_ACTIONS_MENU_ITEMID,
-                  } )}),
+                Config(NextBestActionButton, {itemId: "nextBestActionItemIdForm", contentValueExpression: WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION,
+                  menu: Config(ContentActionMenu)}),
+              ]
+            }),
+          ]
+        }),
+        Config(PreviewPanelToolbar, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              onlyIf: isPreviewPanelToolbar,
+              after: [Config(Component, {itemId: PreviewPanelToolbar.COLLAPSE_BUTTON_ITEM_ID})],
+              items: [
+                Config(NextBestActionButton, {
+                  itemId: "nextBestActionItemIdPreview", contentValueExpression: WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION,
+                  preview: true,
+                  menu: Config(ContentActionMenu),
+                }),
               ]
             }),
           ]
@@ -135,6 +157,22 @@ class ContentActionsPlugin extends StudioPlugin {
           plugins: [
             Config(HideComponentPlugin, {
               bindTo: ValueExpressionFactory.createFromFunction(bind(this$, this$.#isContentActionsEnabled))
+            })
+          ]
+        }),
+
+        Config(ControlRoom, {
+          plugins: [
+            Config(AddItemsPlugin, {
+              index: 0,
+              items: [
+                Config(ContentActionsPanel),
+                Config(MultiItemSplitter, {
+                  stateId: "control-room-internal-splitter-actions",
+                  ui: SplitterSkin.ACCORDION.getSkin(),
+                  size: 3,
+                }),
+              ]
             })
           ]
         })
@@ -160,7 +198,11 @@ class ContentActionsPlugin extends StudioPlugin {
 }
 
 const isDocumentFormToolbar = (container: Container): boolean => {
-  return container.xtype === DocumentFormToolbar.xtype;
+  return container.xtype === DocumentFormToolbar.xtype && featureFlagService.isEnabled(ContentActionsPlugin.FEATURE_CONTENT_ACTIONS_MENU);
+};
+
+const isPreviewPanelToolbar = (container: Container): boolean => {
+  return container.xtype === PreviewPanelToolbar.xtype && featureFlagService.isEnabled(ContentActionsPlugin.FEATURE_CONTENT_ACTIONS_MENU);
 };
 
 

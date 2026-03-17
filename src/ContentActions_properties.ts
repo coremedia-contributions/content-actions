@@ -8,7 +8,10 @@ interface ContentActions_properties {
   ContentAction_reset_form_config: string;
   ContentAction_versionComparison_open_text: string;
   ContentAction_masterComparison_open_text: string;
+  ContentAction_variantComparison_open_text: string;
   ContentAction_versionComparison_close_text: string
+  ContentAction_openEditingHistory_text: string;
+  ContentAction_openFormularEditor_text: string;
 
   state_checked_out: string;
   state_published: string;
@@ -29,6 +32,9 @@ const ContentActions_properties: ContentActions_properties = {
   ContentAction_versionComparison_open_text: "Compare Versions",
   ContentAction_versionComparison_close_text: "Close Version Compare",
   ContentAction_masterComparison_open_text: "Compare with Master",
+  ContentAction_variantComparison_open_text: "Compare Variants",
+  ContentAction_openEditingHistory_text: "Open Editing History",
+  ContentAction_openFormularEditor_text: "Configure Form",
 
   state_checked_out: "Checked-Out",
   state_published: "Version Published",

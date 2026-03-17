@@ -22,6 +22,7 @@ class ContentTypeIconDisplayField extends IconDisplayField {
       ui: IconDisplayFieldSkin.WORKAREA.getSkin(),
       overflowBehaviour: OverflowBehaviour.ELLIPSIS,
       tooltipOnValue: true,
+      scale: "medium",
       plugins: [
         Config(BindPlugin, {
           bindTo: config.bindTo.extendBy("type"),

@@ -3,21 +3,18 @@ import ValueExpression from "@coremedia/studio-client.client-core/data/ValueExpr
 import ConfigUtils from "@jangaroo/runtime/ConfigUtils";
 import BindPlugin from "@coremedia/studio-client.ext.ui-components/plugins/BindPlugin";
 import WorkArea from "@coremedia/studio-client.main.editor-components/sdk/desktop/WorkArea";
-import {ContentLocalizationUtil} from "@coremedia/studio-client.cap-base-models";
 import IconDisplayFieldSkin from "@coremedia/studio-client.ext.ui-components/skins/IconDisplayFieldSkin";
 import CheckInAction from "@coremedia/studio-client.ext.cap-base-components/actions/CheckInAction";
 import ShowStartPublicationWorkflowWindowAction
   from "@coremedia/studio-client.main.control-room-editor-components/actions/ShowStartPublicationWorkflowWindowAction";
-import {SvgIconUtil} from "@coremedia/studio-client.base-models";
-import { inProduction } from "@coremedia/studio-client.common-icons";
 import ContentActions_properties from "../ContentActions_properties";
 import SplitButton from "@jangaroo/ext-ts/button/Split";
+import {observeFormCollapsed} from "@coremedia/studio-client.form-models/premular/premularUserPreferences";
 
 interface NextBestActionButtonConfig extends Config<SplitButton>, Partial<Pick<NextBestActionButton,
-  "contentValueExpression"
+  "contentValueExpression"|"preview"
 >> {
 }
-
 
 class NextBestActionButton extends SplitButton {
   declare Config: NextBestActionButtonConfig;
@@ -26,7 +23,8 @@ class NextBestActionButton extends SplitButton {
   checkedIn: string;
   published: string;
   stateCls:string;
-  private changeLifecycleStatus: (...params: any[]) => any;
+  preview: boolean = false;
+  subscriber: any;
 
   static updateStatus(button: NextBestActionButton) {
     if (button.lifecycleStatus === undefined || button.checkedIn === undefined) return;
@@ -35,15 +33,12 @@ class NextBestActionButton extends SplitButton {
     if (button.lifecycleStatus === "published") {
       button.stateCls = "published";
       button.setText(ContentActions_properties.state_published);
-      button.setIconCls(ContentLocalizationUtil.getIconStyleClassForStatus(button.stateCls));
     } else if (button.checkedIn) {
       button.setText(ContentActions_properties.next_action_publish);
       button.stateCls = "in-production";
-      button.setIconCls(SvgIconUtil.getIconStyleClassForSvgIcon(inProduction));
     } else {
       button.setText(ContentActions_properties.next_action_checkin);
       button.stateCls = "checked-out";
-      button.setIconCls(ContentLocalizationUtil.getIconStyleClassForStatus(button.stateCls));
     }
     button.addCls("next_best_action_btn_state_"+button.stateCls);
   }
@@ -92,11 +87,21 @@ class NextBestActionButton extends SplitButton {
         }),
       ]
     }), config));
+
+    if (this.preview){
+      this.subscriber = observeFormCollapsed().subscribe((value: boolean)=>{
+        this.setHidden(!value);
+      });
+    }
   }
 
 
-
-
+  protected override onDestroy(): any {
+    if (this.subscriber){
+      this.subscriber.unsubscribe();
+    }
+    return super.onDestroy();
+  }
 }
 
 

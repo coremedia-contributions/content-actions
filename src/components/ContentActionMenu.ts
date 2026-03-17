@@ -27,6 +27,7 @@ import ResetHideServiceAction
 import DeleteAction from "@coremedia/studio-client.main.editor-components/sdk/actions/DeleteAction";
 import OpenContentHistoryAction from "../actions/OpenContentHistoryAction";
 import OpenCloseMasterCompareAction from "../actions/OpenCloseMasterCompareAction";
+import OpenCloseVariantCompareAction from "../actions/OpenCloseVariantCompareAction";
 
 interface ContentActionMenuConfig extends Config<Menu> {
 }
@@ -96,11 +97,15 @@ class ContentActionMenu extends Menu {
           baseAction: Config(OpenCloseMasterCompareAction, {contentValueExpression: WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION}),
         }),
         Config(Item, {
-          text: "Open Editing History",
+          itemId: "closeVariantControlButtonItemId",
+          baseAction: Config(OpenCloseVariantCompareAction, {contentValueExpression: WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION}),
+        }),
+        Config(Item, {
+          text: ContentActions_properties.ContentAction_openEditingHistory_text,
           baseAction: Config(OpenContentHistoryAction, {} )
         }),
         Config(Separator),
-        Config(Item, { baseAction: Config(ActionRef, { actionId: OpenHideServiceAction.ACTION_ID }) , iconCls: HideService_properties.openHideService_btn_iconCls}),
+        Config(Item, { text:ContentActions_properties.ContentAction_openFormularEditor_text, baseAction: Config(ActionRef, { actionId: OpenHideServiceAction.ACTION_ID }) , iconCls: HideService_properties.openHideService_btn_iconCls}),
         Config(Item, { baseAction: Config(ActionRef, { actionId: ResetHideServiceAction.ACTION_ID }) , iconCls: HideService_properties.resetHideService_btn_iconCls, text: ContentActions_properties.ContentAction_reset_form_config}),
         Config(Separator),
         Config(Item, {

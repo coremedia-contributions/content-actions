@@ -6,11 +6,14 @@ If a project is inactive it means that the development has been discontinued and
 )
 
 # Studio Quick Actions for CoreMedia Blueprint
-This extension adds a Quick Actions Button to the document form toolbar and removes the Action-Toolbar
+This extension adds a Quick Actions Button to the document form toolbar and removes the action toolbar. The Quick Actions Menu button is available on the preview toolbar, if the document form is collapsed. The button shows the next best action for the content, which is determined by the content's state and the user's permissions.
 
 ## Features
 ### Quick Actions Menu 
 ![content-actions-01.png](docs/content-actions-01.png)
+
+The Quick Actions Menu button is available on the preview toolbar, if the document form is collapsed
+![content-actions-06.png](docs/content-actions-06.png)
 
 ### Next-Best-Action Button
 Content is checked out
@@ -21,6 +24,11 @@ Content is not published yet
 
 Content is published
 ![content-actions-04.png](docs/content-actions-04.png)
+
+
+### Quick Actions for Control Room
+This extension also adds a Quick Actions Button to the Control Room toolbar, which allows users to perform actions on the selected content directly from the Control Room.
+![content-actions-05.png](docs/content-actions-05.png)
 
 The extension is meant to be a code drop. Use it as-is and feel free to adapt it to your needs.
 

@@ -9,10 +9,16 @@ import ShowStartPublicationWorkflowWindowAction
   from "@coremedia/studio-client.main.control-room-editor-components/actions/ShowStartPublicationWorkflowWindowAction";
 import ContentActions_properties from "../ContentActions_properties";
 import SplitButton from "@jangaroo/ext-ts/button/Split";
-import {observeFormCollapsed} from "@coremedia/studio-client.form-models/premular/premularUserPreferences";
+import {
+  observeFormCollapsed
+} from "@coremedia/studio-client.form-models/premular/premularUserPreferences";
+import editorContext from "@coremedia/studio-client.main.editor-components/sdk/editorContext";
+import {as} from "@jangaroo/runtime";
+import Premular from "@coremedia/studio-client.main.editor-components/sdk/premular/Premular";
+import PremularBase from "@coremedia/studio-client.main.editor-components/sdk/premular/PremularBase";
 
 interface NextBestActionButtonConfig extends Config<SplitButton>, Partial<Pick<NextBestActionButton,
-  "contentValueExpression"|"preview"
+    "contentValueExpression"|"preview"
 >> {
 }
 
@@ -88,10 +94,21 @@ class NextBestActionButton extends SplitButton {
       ]
     }), config));
 
+    // handle visibility if next best action button is in preview toolbar
     if (this.preview){
+      //handle form collaps actions
       this.subscriber = observeFormCollapsed().subscribe((value: boolean)=>{
         this.setHidden(!value);
       });
+
+      // handle tab change events
+      WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.addChangeListener((content) => {
+        let premular = as(editorContext._.getWorkArea().getActiveTab(), Premular);
+        let activeToolbar = premular.getActiveToolbarItemExpression().getValue();
+        let isDocumentFormCollapsed = activeToolbar === PremularBase.DOCUMENT_FORM_TOOLBAR_ITEM_ID;
+        this.setHidden(isDocumentFormCollapsed);
+        console.log("Tab changed, form collapsed ", activeToolbar);
+      })
     }
   }
 
@@ -103,8 +120,5 @@ class NextBestActionButton extends SplitButton {
     return super.onDestroy();
   }
 }
-
-
-
 
 export default NextBestActionButton

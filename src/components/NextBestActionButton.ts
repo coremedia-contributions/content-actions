@@ -102,21 +102,42 @@ class NextBestActionButton extends SplitButton {
       });
 
       // handle tab change events
-      WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.addChangeListener((content) => {
-        let premular = as(editorContext._.getWorkArea().getActiveTab(), Premular);
-        let activeToolbar = premular.getActiveToolbarItemExpression().getValue();
-        let isDocumentFormCollapsed = activeToolbar === PremularBase.DOCUMENT_FORM_TOOLBAR_ITEM_ID;
-        this.setHidden(isDocumentFormCollapsed);
-        console.log("Tab changed, form collapsed ", activeToolbar);
-      })
+      WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.addChangeListener(this.handleActiveTabChanged());
+
+      //handle active toolbar type changed -> shrinking document form so that overflow toolbar is shown
+      let premular = as(editorContext._.getWorkArea().getActiveTab(), Premular);
+      premular.getActiveToolbarItemExpression().addChangeListener(this.handleActiveToolbarItemChanged())
     }
   }
 
+  private handleActiveToolbarItemChanged() {
+    return (valueExpression) => {
+      let value = valueExpression.getValue();
+      this.setHidden(value !== Premular.OVERFLOW_CONTAINER_ITEM_ID);
+    };
+  }
+
+  private handleActiveTabChanged() {
+    return () => {
+      let premular = as(editorContext._.getWorkArea().getActiveTab(), Premular);
+      let activeToolbar = premular.getActiveToolbarItemExpression().getValue();
+      let isDocumentFormCollapsed = activeToolbar === PremularBase.DOCUMENT_FORM_TOOLBAR_ITEM_ID;
+      this.setHidden(isDocumentFormCollapsed);
+    };
+  }
 
   protected override onDestroy(): any {
     if (this.subscriber){
       this.subscriber.unsubscribe();
     }
+
+    WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.removeChangeListener(this.handleActiveTabChanged());
+
+    let premular = as(editorContext._.getWorkArea().getActiveTab(), Premular);
+    if (premular.getActiveToolbarItemExpression()) {
+      premular.getActiveToolbarItemExpression().removeChangeListener(this.handleActiveToolbarItemChanged);
+    }
+
     return super.onDestroy();
   }
 }

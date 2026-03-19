@@ -106,7 +106,12 @@ class NextBestActionButton extends SplitButton {
 
       //handle active toolbar type changed -> shrinking document form so that overflow toolbar is shown
       let premular = as(editorContext._.getWorkArea().getActiveTab(), Premular);
-      premular.getActiveToolbarItemExpression().addChangeListener(this.handleActiveToolbarItemChanged())
+      if (premular) {
+        let activeToolbarItemExpression = premular.getActiveToolbarItemExpression();
+        if (activeToolbarItemExpression) {
+          activeToolbarItemExpression.addChangeListener(this.handleActiveToolbarItemChanged())
+        }
+      }
     }
   }
 
@@ -120,9 +125,14 @@ class NextBestActionButton extends SplitButton {
   private handleActiveTabChanged() {
     return () => {
       let premular = as(editorContext._.getWorkArea().getActiveTab(), Premular);
-      let activeToolbar = premular.getActiveToolbarItemExpression().getValue();
-      let isDocumentFormCollapsed = activeToolbar === PremularBase.DOCUMENT_FORM_TOOLBAR_ITEM_ID;
-      this.setHidden(isDocumentFormCollapsed);
+      if (premular) {
+        let activeToolbarItemExpression = premular.getActiveToolbarItemExpression();
+        if (activeToolbarItemExpression) {
+          let activeToolbar = activeToolbarItemExpression.getValue();
+          let isDocumentFormCollapsed = activeToolbar === PremularBase.DOCUMENT_FORM_TOOLBAR_ITEM_ID;
+          this.setHidden(isDocumentFormCollapsed);
+        }
+      }
     };
   }
 
@@ -134,10 +144,12 @@ class NextBestActionButton extends SplitButton {
     WorkArea.ACTIVE_CONTENT_VALUE_EXPRESSION.removeChangeListener(this.handleActiveTabChanged());
 
     let premular = as(editorContext._.getWorkArea().getActiveTab(), Premular);
-    if (premular.getActiveToolbarItemExpression()) {
-      premular.getActiveToolbarItemExpression().removeChangeListener(this.handleActiveToolbarItemChanged);
+    if (premular) {
+      let activeToolbarItemExpression = premular.getActiveToolbarItemExpression();
+      if (activeToolbarItemExpression) {
+        activeToolbarItemExpression.removeChangeListener(this.handleActiveToolbarItemChanged);
+      }
     }
-
     return super.onDestroy();
   }
 }
